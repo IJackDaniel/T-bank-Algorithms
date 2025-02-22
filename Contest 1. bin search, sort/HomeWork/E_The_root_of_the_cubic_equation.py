@@ -1,27 +1,21 @@
 def f(n1, n2, n3, n4, x):
-    result = n1 * (x ** 3) + n2 * (x ** 2) + n3 * x + n4
-    return result
+    return n1 * (x ** 3) + n2 * (x ** 2) + n3 * x + n4
 
-def main():
-    a, b, c, d = map(int, input().split())
 
-    l = -1e6
-    r = 1e6 + 10
-    eps = 1e-15
-    m = 0
+a, b, c, d = map(int, input().split())
 
-    while l < r:
-        m = (l + r) / 2.0
+l = -1e10 - 1
+r = 1e10 + 1
+eps = 1e-10
+x = None
 
-        if f(a, b, c, d, l) * f(a, b, c, d, m) < 0:
-            r = m
-        else:
-            l = m
+while abs(r - l) >= eps:
+    x = (l + r) / 2
+    y1 = f(a, b, c, d, x)
+    y2 = f(a, b, c, d, l)
 
-        if abs(f(a, b, c, d, m)) < eps:
-            break
-
-    print(m)
-
-if __name__ == "__main__":
-    main()
+    if y1 * y2 <= 0:
+        r = x
+    else:
+        l = x
+print(x)
