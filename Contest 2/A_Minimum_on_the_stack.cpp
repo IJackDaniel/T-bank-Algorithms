@@ -6,14 +6,30 @@ using namespace std;
 class Stack
 {
 private:
-    vector<int> array;
+    vector<vector<int>> array;
 
-    public:
-    Stack() {}
+public:
+    Stack() {};
 
     void push(int n)
     {
-        array.push_back(n);
+        if (array.size() == 0)
+        {
+            array.push_back({n, n});
+        }
+        else
+        {
+            int lst = array[array.size() - 1][1];
+            if (lst < n)
+            {
+                array.push_back({n, lst});
+            }
+            else
+            {
+                array.push_back({n, n});
+            }
+        }
+        
     }
 
     void del()
@@ -23,15 +39,7 @@ private:
 
     int min()
     {
-        //
-    }
-
-    void show()
-    {
-        for (int i = array.size() - 1; i >= 0; i--)
-        {
-            cout << array[i] << endl;
-        }
+        return array[array.size() - 1][1];
     }
 };
 
@@ -42,27 +50,36 @@ int main()
 
     Stack stack;
 
-    int command, num;
+    int command, num, mn;
     for (int a = 0; a < n; a++)
     {
-        cin >> command >> num;
+        cin >> command;
         switch (command)
         {
-        case 1:
-            stack.push(num);
-            break;
-        
+            case 1:
+            {
+                cin >> num;
+                stack.push(num);
+                break;
+            }
+            
             case 2:
-            stack.del();
-            break;
-        
+            {
+                stack.del();
+                break;
+            }
+            
             case 3:
-            // stack.min();
-            stack.show();
-            break;
-        
-        default:
-            break;
+            {
+                mn = stack.min();
+                cout << mn << endl;
+                break;
+            }
+            
+            default:
+            {
+                break;    
+            }
         }
     }
     return 0;
