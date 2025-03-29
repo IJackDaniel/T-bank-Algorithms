@@ -1,15 +1,11 @@
-import random
-import string
-
-
 def cyclic_shifts(s):
     n = len(s)
-    end_s = s
+    double_s = s + s
     mn_s = s
     for i in range(1, n):
-        shift = end_s[-1] + end_s[:-1]
-        end_s = shift
-        mn_s = min(mn_s, end_s)
+        current_shift = double_s[i:i + n]
+        if current_shift < mn_s:
+            mn_s = current_shift
     return mn_s
 
 

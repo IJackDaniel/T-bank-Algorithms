@@ -17,10 +17,10 @@ def find_pattern(pattern, text):
     return [i - len(pattern) - 1 for i in range(len(z)) if z[i] == len(pattern)]
 
 
-T = input()
+s = input()
 q = int(input())
 for _ in range(q):
     s_i = input()
-    ans_i = find_pattern(s_i, T)
+    ans_i = find_pattern(s_i, s)
     print(len(ans_i), end=" ")
     print(*ans_i)
