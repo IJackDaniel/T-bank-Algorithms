@@ -1,50 +1,61 @@
-# class Stack:
-#     def __init__(self):
-#         self.items = []
-
-#     def is_empty(self):
-#         if not self.items:
-#             return True
-#         return False
-
-#     def push(self, number):
-#         self.items.append(number)
-
-#     def pop(self):
-#         if self.is_empty():
-#             return "error"
-#         else:
-#             return self.items.pop()
-
-#     def back(self):
-#         if self.is_empty():
-#             return "error"
-#         else:
-#             return self.items[-1]
+from collections import deque
 
 
-# way1 = Stack()
-# way2 = Stack()
-# blind_alley = Stack()
+class Stack:
+    def __init__(self):
+        self.stack = []
 
-# n = int(input())
-# train = list(map(int, input().split()))
+    def push(self, num):
+        self.stack.append(num)
 
-# for i in range(n - 1, -1, -1):
-#     way1.push(train[i])
+    def pop(self):
+        return self.stack.pop()
 
-# while not way1.is_empty():
-#     cur = way1.pop()
-#     if blind_alley.is_empty() or blind_alley.back() > cur:
-#         blind_alley.push(cur)
-#     else:
-#         way2.push(blind_alley.pop())
-#         while (not blind_alley.is_empty()) and (not way2.is_empty()) and (blind_alley.back() - 1 == way2.back()):
-#             way2.push(blind_alley.pop())
-#         blind_alley.push(cur)
+    def len(self):
+        return len(self.stack)
 
-# while not blind_alley.is_empty():
-#     way2.push(blind_alley.pop())
+    def get_elem(self, index):
+        return self.stack[index]
 
-# result = "YES" if way2.items == sorted(train) else "NO"
-# print(result)
+
+def solve():
+    answer = []
+    stack = Stack()
+    dq = deque()
+    num = 1
+    total = 0
+    for val in tr:
+        if stack.len() > 0 and val > stack.get_elem(stack.len() - 1):
+            print(0)
+            return 0
+
+        dq.append(1)
+        stack.push(val)
+        while stack.len() > 0 and stack.get_elem(stack.len() - 1) == num:
+            dq.append(2)
+            stack.pop()
+            num += 1
+
+    val = dq.popleft()
+    count = 1
+    while len(dq) > 0:
+        if dq[0] == val:
+            count += 1
+        else:
+            total += 1
+            answer.append((val, count))
+            val = dq[0]
+            count = 1
+        dq.popleft()
+
+    total += 1
+    answer.append((val, count))
+
+    print(total)
+    for item in answer:
+        print(*item)
+
+
+n = int(input())
+tr = list(map(int, input().split()))
+solve()
