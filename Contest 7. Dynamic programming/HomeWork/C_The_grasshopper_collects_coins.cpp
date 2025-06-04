@@ -1,48 +1,61 @@
-#include <algorithm>
 #include <iostream>
 #include <vector>
-#include <climits>
+#include <deque>
+#include <algorithm>
 
 using namespace std;
-const int MOD = 1e9 + 7;
-
-
-#define all(_x) (_x).begin(), (_x).end()
-#define print_array(_v) for(int i=0;i<(_v).size();++i){cout<<(_v)[i]<<' ';}cout<<endl;
-
 
 int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+
     int n, k;
     cin >> n >> k;
-    vector<int> a(n);
-    a[0] = 0;
-    a[n - 1] = 0;
-    for (int i = 1; i < n - 1; ++i) cin >> a[i];
+    vector<int> coins(n);
+    coins[0] = 0;
+    coins[n-1] = 0;
+    for (int i = 1; i < n-1; ++i) {
+        cin >> coins[i];
+    }
 
-    vector<int> d(n, INT_MAX), p(n);
-    d[0] = a[0];
+    vector<int> dp(n, -1e9); 
+    vector<int> prev(n, -1);  
+    dp[0] = coins[0];
+    
+    deque<int> q;  
+    q.push_back(0);
 
     for (int i = 1; i < n; ++i) {
-        int last_min = i - 1;
-        for (int j = max(0, i - k); j < i; ++j) {
-            if (d[last_min] < d[j]) {
-                last_min = j;
-            }
+        while (!q.empty() && q.front() < i - k) {
+            q.pop_front();
         }
-        d[i] = d[last_min] + a[i];
-        p[i] = last_min;
+        
+        if (!q.empty()) {
+            int best_prev = q.front();
+            dp[i] = dp[best_prev] + coins[i];
+            prev[i] = best_prev;
+        }
+        
+        while (!q.empty() && dp[i] >= dp[q.back()]) {
+            q.pop_back();
+        }
+        q.push_back(i);
     }
 
-    cout << d.back() << endl;
-    int cur = n - 1;
-    vector<int> ans = { cur + 1 };
+    cout << dp[n-1] << endl;
 
-    while (cur != 0) {
-        cur = p[cur];
-        ans.push_back(cur + 1);
+    vector<int> path;
+    for (int cur = n-1; cur != -1; cur = prev[cur]) {
+        path.push_back(cur + 1); 
     }
-    reverse(all(ans));
+    reverse(path.begin(), path.end());
+    
+    cout << path.size() - 1 << endl;
+    for (int x : path) {
+        cout << x << ' ';
+    }
+    cout << endl;
 
-    cout << ans.size() - 1 << endl;
-    print_array(ans);
+    return 0;
 }

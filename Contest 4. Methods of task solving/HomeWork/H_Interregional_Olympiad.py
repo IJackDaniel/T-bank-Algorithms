@@ -1,17 +1,25 @@
 n, c = map(int, input().split())
-times = [tuple(map(int, input().split())) + (i,) for i in range(1, n + 1)]
-times.sort(key=lambda x: x[1])  # Сортируем по времени окончания
+events = []
 
-ans = []
-cur_end = -1
+for i in range(1, n + 1):
+    start_time, duration = map(int, input().split())
+    end_time = start_time + duration
+    events.append((start_time, end_time, i))
 
-for start, duration, idx in times:
-    end = start + duration
-    if start >= cur_end:
-        ans.append(idx)
-        cur_end = end
+events.sort(key=lambda event: event[1])
 
-total = len(ans) * c
-print(total)
-print(len(ans))
-print(*ans, sep=" ")
+selected_events = []
+if events:
+    selected_events.append(events[0][2])
+    current_end_time = events[0][1]
+
+    for start_time, end_time, event_id in events[1:]:
+        if start_time >= current_end_time:
+            selected_events.append(event_id)
+            current_end_time = end_time
+
+
+total_cost = len(selected_events) * c
+print(total_cost)
+print(len(selected_events))
+print(*selected_events)
